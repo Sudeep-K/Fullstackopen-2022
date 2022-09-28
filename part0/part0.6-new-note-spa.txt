@@ -1,0 +1,25 @@
+note over browser:
+user enters the data 
+and clicks Save button
+end note
+
+note over browser:
+we send JSON-data containing
+both the content of the note
+(content) and the timestamp (date)
+to the server
+end note
+
+browser->server: HTTPS POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over server:
+servers appends the json file over data.json
+end note
+
+server-->browser: server responds with status code 201 created
+
+note over browser:
+the server does not ask for a redirect,
+the browser stays on the same page, and
+it sends no further HTTP requests.
+end note
