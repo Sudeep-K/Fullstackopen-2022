@@ -1,0 +1,21 @@
+browser->server: HTTPS GET https://studies.cs.helsinki.fi/exampleapp/spa
+server-->browser: HTML-CODE
+
+browser->server: HTTPS GET https://studies.cs.helsinki.fi/exampleapp/main.css
+server-->browser: main.css
+
+browser->server: HTTPS GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+server-->browser: spa.js
+
+note over browser:
+browser executes spa.js and request for 
+data.json from the server
+end note
+
+browser->server: HTTPS GET https://studies.cs.helsinki.fi/exampleapp/data.json
+server-->browser: [{content: "nice to meet you :)",date: "2022-09-27T18:31:28.705Z"},...]
+
+note over browser:
+browser executes the event handler 
+that rerenders the note
+end note
