@@ -25,14 +25,28 @@ function App() {
   }
 
   const checkRender = () => {
-    if (all != 0) {
+    if (all !== 0) {
       return (
         <>
-          <Display text={'good'} count={good} />
-          <Display text={'neutral'} count={neutral} />
-          <Display text={'bad'} count={bad} />
-          <Display text={'all'} count={all} />
-          <Statistics good={good} neutral={neutral} bad={bad} all={all} />
+          <table>
+            <tr>
+              <th>Statistic</th>
+              <th>Value</th>
+            </tr>
+            <tr>
+              <Display text={'good'} count={good} />
+            </tr>
+            <tr>
+              <Display text={'neutral'} count={neutral} />
+            </tr>
+            <tr>
+              <Display text={'bad'} count={bad} />
+            </tr>
+            <tr>
+              <Display text={'all'} count={all} />
+            </tr>
+            <Statistics good={good} neutral={neutral} bad={bad} all={all} />
+          </table>
         </>
       )
     }

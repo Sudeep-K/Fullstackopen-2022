@@ -8,13 +8,17 @@ function Statistics( {good, neutral, bad, all} ) {
     }
 
     const positivePerc = () => {
-        return (good/all * 100)
+        return (`${good/all * 100} %`)
     }
   
     return (
         <>
-            <Display text={'average'} count={computeAverage()} />
-            <Display text={'positive'} count={positivePerc()} />
+            <tr>
+                <Display text={'average'} count={computeAverage()} />
+            </tr>
+            <tr>
+                <Display text={'positive'} count={positivePerc()} />
+            </tr>
         </>
   )
 }

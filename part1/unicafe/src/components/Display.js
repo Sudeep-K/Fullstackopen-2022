@@ -2,7 +2,10 @@ import React from 'react'
 
 function Display({ text, count}) {
   return (
-    <p>{text} {count}</p>
+    <>
+        <td>{text}</td>
+        <td>{count}</td>
+    </>
   )
 }
 
