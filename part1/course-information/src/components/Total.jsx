@@ -1,8 +1,8 @@
 import React from 'react'
 
-const Total = (props) => {
+const Total = ({ parts }) => {
   return (
-    <p>Number of exercises {parseInt(props.parts[0].exercises) + parseInt(props.parts[1].exercises) + parseInt(props.parts[2].exercises)}</p>
+    <h3>total of {parts.reduce((total, part) => total + part.exercises, 0)} excercises</h3>
   )
 }
 
