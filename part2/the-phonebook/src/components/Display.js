@@ -1,8 +1,10 @@
 import React from 'react'
 
-function Display({ name }) {
+function Display({ name, number }) {
   return (
-    <div>{name}</div>
+    <>
+        <div> {name} {number} </div>
+    </>
   )
 }
 
