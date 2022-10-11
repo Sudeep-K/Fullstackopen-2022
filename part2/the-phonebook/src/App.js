@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useEffect } from "react";
-import axios from "axios";
 
 import Display from "./components/Display";
 import Form from "./components/Form";
 import Filter from "./components/Filter";
+
+import personService from './services/person';
 
 function App() {
   const [contacts, setContacts] = useState([])
@@ -14,11 +15,11 @@ function App() {
   const [filteredContacts, setFilteredContacts] = useState([]);
 
   const hook = () => {
-    const eventHandler = (response) => {
-      setContacts(response.data);
+    const eventHandler = (initialContact) => {
+      setContacts(initialContact);
     }
 
-    const promise = axios.get('http://localhost:3001/persons');
+    const promise = personService.getAll();
     promise.then(eventHandler);
   }
 
@@ -48,9 +49,13 @@ function App() {
       number: newNumber
     }
 
-    setContacts([...contacts, tempContact]);
-    setNewName('');
-    setNewNumber('');
+    personService.create(tempContact)
+    .then(returnedContacts => {
+      setContacts([...contacts, returnedContacts]);
+      setNewName('');
+      setNewNumber('');
+    })
+
   }
 
   const handleNameChange = (event) => {
