@@ -1,9 +1,9 @@
 import React from 'react'
 
-function Display({ name, number }) {
+function Display({ contact, deleteContact }) {
   return (
     <>
-        <div> {name} {number} </div>
+        <div> {contact.name} {contact.number} <button onClick={() => deleteContact(contact.id)}>delete</button></div>
     </>
   )
 }

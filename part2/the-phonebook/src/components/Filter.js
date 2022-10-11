@@ -8,8 +8,7 @@ function Filter({ filterInput, onChange, filteredContacts }) {
         {filteredContacts.map((contact) => 
                                   <Display 
                                     key={contact.id}
-                                    name={contact.name} 
-                                    number={contact.number} 
+                                    contact={contact}
                                   />
                     )
       }
