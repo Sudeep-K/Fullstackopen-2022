@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Display from "./components/Display";
 import Form from "./components/Form";
 import Filter from "./components/Filter";
+import Notification from "./components/Notification";
 
 import personService from './services/person';
 import axios from 'axios';
@@ -14,6 +15,7 @@ function App() {
   const [newNumber, setNewNumber] = useState('');
   const [filterInput, setFilterInput] = useState('');
   const [filteredContacts, setFilteredContacts] = useState([]);
+  const [notificationMsg, setNotificationMsg] = useState('something something went wrong....');
 
   const hook = () => {
     const eventHandler = (initialContact) => {
@@ -39,10 +41,13 @@ function App() {
 
     const contact = contacts.find(c => c.name === newName);
     const updatedContact = {...contact, number: newNumber};
-    console.log(updatedContact)
     axios.put(`http://localhost:3001/persons/${contact.id}`, updatedContact)
     .then(response => {
       setContacts(contacts.map(c => c.id !== updatedContact.id ? c : response.data))
+      setNotificationMsg(`${updatedContact.name}'s contact was updated to ${updatedContact.number}`);
+      setTimeout(() => {
+        setNotificationMsg(null);
+      }, 3000);
     })
   }
 
@@ -50,7 +55,6 @@ function App() {
     event.preventDefault();
 
     const sameContact = contacts.filter((contact) => contact.name === newName);
-    // sameContact.length > 0 ? alert(`${newName} is already added to the phonebook`) : addContact(event);
     if (sameContact.length > 0) {
       if (window.confirm(`${newName} is already added to the phonebook, replace the old number with new one`)) {
         updateContact(event);
@@ -74,6 +78,10 @@ function App() {
     personService.create(tempContact)
     .then(returnedContacts => {
       setContacts([...contacts, returnedContacts]);
+      setNotificationMsg(`${tempContact.name}'s contact was added to the server`);
+      setTimeout(() => {
+        setNotificationMsg(null);
+      }, 3000);
       setNewName('');
       setNewNumber('');
     })
@@ -83,12 +91,18 @@ function App() {
     if (window.confirm('Do you want to delete contact id', id)) {
       personService.deletecontact(id)
       .then(response => {
-        setContacts(contacts.filter(c => c.id !== id))
+        setContacts(contacts.filter(c => c.id !== id));
+        setNotificationMsg(`Information of contact id ${id} has been removed from the server`);
+      setTimeout(() => {
+        setNotificationMsg(null);
+      }, 3000);
       })
       .catch(error => {
-        console.log('error deleting contact');
+        setNotificationMsg(`Information of contact id ${id} had already been removed from the server`);
+      setTimeout(() => {
+        setNotificationMsg(null);
+      }, 3000);
       })
-      alert('✅contact deleted');
     } else {
      alert('❌contact not deleted'); 
     }
@@ -104,6 +118,7 @@ function App() {
 
   return (
     <>
+      <Notification message={notificationMsg} />
       <h1>Phonebook</h1>
       <Filter
         onChange={filterContacts}

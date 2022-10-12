@@ -1,0 +1,15 @@
+.error {
+    background-color: #ff6961;
+    border-left: 5px red solid;
+    margin: 15px;
+    width: 30%;
+    padding: 5px; 
+}
+
+.notification {
+    background-color: #90EE90;
+    border-left: 5px green solid;
+    margin: 15px;
+    width: 30%;
+    padding: 5px;
+}
