@@ -3,6 +3,26 @@ let persons = require("./persons");
 
 const app = express();
 
+app.use(express.json());
+
+// generates a unique id
+const generateId = () => {
+    return parseInt(Math.random() * 10000000);
+}
+
+// verifies the header body for full information
+const verifyData = (body) => {
+    if (!body.name || !body.number) {
+        if (!body.name) {
+            return { error: 'include name in request body' }
+        } else {
+            return { error: 'include number in request body' }
+        }
+    } else if (persons.find(p => p.name === body.name)) {
+        return { error: 'name must be unique' }
+    }
+}
+
 // get all persons
 app.get('/api/persons', (req, res) => {
     res.json(persons);
@@ -42,6 +62,25 @@ app.delete('/api/persons/:id', (req, res) => {
 
     persons = persons.filter(p => p.id !== id);
     res.status(204).end();
+})
+
+// add a new person
+app.post('/api/persons', (req, res) => {
+    const body = req.body;
+
+    const message = verifyData(body);
+    if (message) {
+        res.json(message);
+    }
+
+    const person = {
+        id: generateId(),
+        name: body.name, 
+        number: body.number
+    }
+
+    persons.push(person);
+    res.json(persons);
 })
 
 const PORT = 5000;
