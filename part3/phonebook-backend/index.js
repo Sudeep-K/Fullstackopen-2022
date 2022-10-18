@@ -1,9 +1,14 @@
+const { json } = require("express");
 const express = require("express");
+const morgan = require("morgan");
 let persons = require("./persons");
 
 const app = express();
 
+morgan.token('body', (req, res) => JSON.stringify(req.body));
+
 app.use(express.json());
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 // generates a unique id
 const generateId = () => {
