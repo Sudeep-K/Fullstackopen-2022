@@ -1,4 +1,5 @@
 const express = require("express");
+const morgan = require("morgan");
 
 const app = express();
 
@@ -11,7 +12,10 @@ const requestLogger = (req, res, next) => {
     next();
 }
 
+
 app.use(express.json());
+morgan.token('body', (req, res) => JSON.stringify(req.body));
+app.use(morgan(':method :url :status :res[content] - :response-time ms :body'));
 app.use(requestLogger);
 
 
@@ -71,11 +75,11 @@ app.delete('/api/notes/:id', (req, res) => {
 app.post('/api/notes', (req, res) => {
     const body = req.body;
 
-    if (!body.header) {
-        return res.status(400).json({
-            error: 'content missing'
-        })
-    }
+    // if (!body.header) {
+    //     return res.status(400).json({
+    //         error: 'content missing'
+    //     })
+    // }
 
     const note = {
         content: body.content,
