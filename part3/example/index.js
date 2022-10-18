@@ -1,7 +1,19 @@
 const express = require("express");
 
 const app = express();
+
+// middleware
+const requestLogger = (req, res, next) => {
+    console.log('Method: ', req.method);
+    console.log('Path: ', req.path);
+    console.log('Body: ', req.body);
+    console.log('--');
+    next();
+}
+
 app.use(express.json());
+app.use(requestLogger);
+
 
 let notes = [
     {
@@ -75,6 +87,12 @@ app.post('/api/notes', (req, res) => {
     notes.concat(note);
     res.json(note);
 })
+
+const unknownEndPoint = (req, res, next) => {
+    res.status(404).json({ error: 'unknown endpoint'});
+}
+
+app.use(unknownEndPoint);
 
 const PORT = 5000;
 
