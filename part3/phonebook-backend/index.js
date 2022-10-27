@@ -1,7 +1,9 @@
+require("dotenv").config();
 const { json } = require("express");
 const express = require("express");
 const morgan = require("morgan");
 let persons = require("./persons");
+const Person = require("./modals/person");
 
 const app = express();
 
@@ -31,7 +33,10 @@ const verifyData = (body) => {
 
 // get all persons
 app.get('/api/persons', (req, res) => {
-    res.json(persons);
+    Person.find({})
+    .then(person => {
+        res.json(person)
+    })
 })
 
 // get info of the request
@@ -47,15 +52,10 @@ app.get('/info', (req, res) => {
 
 // get individual person
 app.get('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id);
-
-    const person = persons.find(p => p.id === id);
-
-    if (!person) {
-        return res.status(404).send();
-    }
-
-    res.json(person);
+    Person.findById(req.params.id)
+    .then(person => {
+        res.json(person)
+    })
 })
 
 // delete individual person
@@ -79,17 +79,18 @@ app.post('/api/persons', (req, res) => {
         res.json(message);
     }
 
-    const person = {
-        id: generateId(),
-        name: body.name, 
+    const person = new Person({
+        name: body.name,
         number: body.number
-    }
+    })
 
-    persons.push(person);
-    res.json(persons);
+    person.save()
+    .then(result => {
+        res.json(result)
+    })
 })
 
-const PORT = 5000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Server is running at port ${PORT}`);
 })
