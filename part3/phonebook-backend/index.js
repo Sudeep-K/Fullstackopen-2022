@@ -12,19 +12,6 @@ app.use(express.static('build'));
 app.use(express.json());
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
-// verifies the header body for full information
-const verifyData = (body) => {
-    if (!body.name || !body.number) {
-        if (!body.name) {
-            return { error: 'include name in request body' }
-        } else {
-            return { error: 'include number in request body' }
-        }
-    } else if (persons.find(p => p.name === body.name)) {
-        return { error: 'name must be unique' }
-    }
-}
-
 // get all persons
 app.get('/api/persons', (req, res) => {
     Person.find({})
@@ -71,13 +58,8 @@ app.delete('/api/persons/:id', (req, res) => {
 })
 
 // add a new person
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
     const body = req.body;
-
-    const message = verifyData(body);
-    if (message) {
-        res.json(message);
-    }
 
     const person = new Person({
         name: body.name,
@@ -87,6 +69,9 @@ app.post('/api/persons', (req, res) => {
     person.save()
     .then(result => {
         res.json(result)
+    })
+    .catch(err => {
+        next(err);
     })
 })
 
@@ -120,6 +105,8 @@ const errorHandler = (error, req, res, next) => {
 
     if (error.name === 'CastError') {
         return res.status(400).send({ error: 'malformatted id' })
+    } else if (error.name === 'ValidationError') {
+        return res.status(400).json({ error: error.message })
     }
 
     next(error);
