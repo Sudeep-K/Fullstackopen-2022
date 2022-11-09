@@ -25,8 +25,12 @@ notesRouter.post('/', async (req, res, next) => {
         date: new Date()
     })
 
-    const savedNote = await note.save()
-    res.status(201).json(savedNote)
+    if (note.content === undefined) {
+        res.status(400).end()
+    } else {
+        const savedNote = await note.save()
+        res.status(201).json(savedNote)
+    }
 })
 
 notesRouter.delete('/:id', async (req, res, next) => {
