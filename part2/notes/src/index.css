@@ -1,5 +1,21 @@
 h1 {
     font-style: italic;
+    color: green;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 300px;
+    border: 1px grey solid;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.login-form > * {
+    display: flex;
+    justify-content: space-between;
 }
 
 .note {
@@ -13,4 +29,16 @@ h1 {
     border-left: 5px red solid;
     margin: 15px;
     width: 30%;
+}
+
+.note-div {
+    width: 500px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.notes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
