@@ -16,15 +16,26 @@ const App = () => {
     )  
   }, [])
 
-  const handleLogin = (event) => {
+  useEffect(() => {
+    const userLoginInfo = window.localStorage.getItem('userLoginInfo')
+    if (userLoginInfo) {
+      console.log(userLoginInfo)
+      const user = JSON.parse(userLoginInfo)
+      setUser(user)
+    }
+  }, [])
+
+  const handleLogin = async (event) => {
     event.preventDefault()
     console.log("loggin in as", username, password)
 
     try {
-      const user = loginService.login({
+      const user = await loginService.login({
         username,
         password
       })
+
+      window.localStorage.setItem('userLoginInfo', JSON.stringify(user))
       setUser(user)
       setUsername('')
       setPassword('')
@@ -33,6 +44,13 @@ const App = () => {
       setUsername('')
       setPassword('')
     }
+  }
+
+  const handleLogOut = (event) => {
+    event.preventDefault()
+
+    window.localStorage.removeItem('userLoginInfo')
+    setUser(null)
   }
 
   return (
@@ -48,6 +66,8 @@ const App = () => {
           />) :
           (<Blogs
             blogs={ blogs }
+            username={ user.username }
+            handleLogOut={ handleLogOut }
           />) 
       }
     </div>
