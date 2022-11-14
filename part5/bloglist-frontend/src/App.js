@@ -9,10 +9,13 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+    blogService.getAll().then(fetchedBlogs =>
+      setBlogs( fetchedBlogs )
     )  
   }, [])
 
@@ -21,6 +24,7 @@ const App = () => {
     if (userLoginInfo) {
       console.log(userLoginInfo)
       const user = JSON.parse(userLoginInfo)
+      blogService.setNewToken(user.token)
       setUser(user)
     }
   }, [])
@@ -36,6 +40,7 @@ const App = () => {
       })
 
       window.localStorage.setItem('userLoginInfo', JSON.stringify(user))
+      blogService.setNewToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -53,6 +58,24 @@ const App = () => {
     setUser(null)
   }
 
+  const handleSubmit = event => {
+    event.preventDefault()
+
+    const newBlog = {
+      title,
+      author,
+      url
+    }
+
+    blogService.create(newBlog)
+    .then(returnedBlog => {
+      setBlogs([...blogs, returnedBlog])
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+    })
+  }
+
   return (
     <div>
       {
@@ -68,6 +91,13 @@ const App = () => {
             blogs={ blogs }
             username={ user.username }
             handleLogOut={ handleLogOut }
+            title={ title }
+            setTitle={ setTitle }
+            author={ author }
+            setAuthor={ setAuthor }
+            url={ url }
+            setUrl={ setUrl }
+            handleSubmit={ handleSubmit }
           />) 
       }
     </div>
