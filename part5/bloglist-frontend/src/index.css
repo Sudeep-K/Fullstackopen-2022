@@ -1,0 +1,7 @@
+.notification {
+    border: 3px black solid;
+    margin: 5px;
+    padding: 2px;
+    width: 500px;
+    height: 20px;
+}

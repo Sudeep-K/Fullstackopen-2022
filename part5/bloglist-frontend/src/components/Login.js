@@ -1,9 +1,18 @@
 import React from 'react'
 
-const Login = ({ username, password, setUsername, setPassword, handleLogin }) => {
+const Login = ({ notification, username, password, setUsername, setPassword, handleLogin }) => {
   return (
     <>
         <h1>Login to application</h1>
+
+        {
+          notification === null ?
+          true : 
+          (
+            <div className='notification'> { notification } </div>
+          )
+        }
+
         <form onSubmit={ handleLogin }>
             <div>
                 Username: <input

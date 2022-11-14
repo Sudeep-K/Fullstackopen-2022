@@ -12,6 +12,7 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(fetchedBlogs =>
@@ -45,7 +46,10 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch(exception) {
-      console.log('error loggin in as', username, password)
+      setNotification(`Wrong credentials`)
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
       setUsername('')
       setPassword('')
     }
@@ -70,6 +74,10 @@ const App = () => {
     blogService.create(newBlog)
     .then(returnedBlog => {
       setBlogs([...blogs, returnedBlog])
+      setNotification(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
       setTitle('')
       setAuthor('')
       setUrl('')
@@ -81,6 +89,7 @@ const App = () => {
       {
         user === null ?
           (<Login 
+            notification={ notification }
             username={ username }
             password={ password } 
             setUsername={ setUsername } 
@@ -98,6 +107,7 @@ const App = () => {
             url={ url }
             setUrl={ setUrl }
             handleSubmit={ handleSubmit }
+            notification={ notification }
           />) 
       }
     </div>

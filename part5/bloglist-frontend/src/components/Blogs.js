@@ -2,11 +2,19 @@ import React from 'react'
 import Blog from './Blog'
 import Create from './Create'
 
-function Blogs({ blogs, username, handleLogOut, title, setTitle, author, setAuthor, url, setUrl, handleSubmit }) {
+function Blogs({ blogs, username, handleLogOut, title, setTitle, author, setAuthor, url, setUrl, handleSubmit, notification }) {
   return (
     <>
         <h1>blogs</h1>
         
+        {
+          notification === null ?
+          true : 
+          (
+            <div className='notification'> { notification } </div>
+          )
+        }
+
         <p>
           <strong>{ username }</strong> has logged-in
           <button onClick={handleLogOut}>log out</button>
