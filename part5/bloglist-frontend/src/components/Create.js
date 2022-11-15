@@ -1,6 +1,24 @@
 import React from 'react'
+import { useState } from 'react'
 
-function Create({ title, setTitle, author, setAuthor, url, setUrl, handleSubmit }) {
+function Create({ create }) {
+    const [title, setTitle] = useState('')
+    const [author, setAuthor] = useState('')
+    const [url, setUrl] = useState('')
+
+    const handleSubmit = (event) => {
+        event.preventDefault()
+
+        create({
+            title,
+            author,
+            url
+        })
+
+        setTitle('')
+        setAuthor('')
+        setUrl('')
+    }
   return (
     <div>
         <h1>create new</h1>

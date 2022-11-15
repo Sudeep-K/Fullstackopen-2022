@@ -9,9 +9,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+  
   const [notification, setNotification] = useState(null)
 
   useEffect(() => {
@@ -45,13 +43,16 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+
     } catch(exception) {
+
       setNotification(`Wrong credentials`)
       setTimeout(() => {
         setNotification(null)
       }, 5000)
       setUsername('')
       setPassword('')
+      
     }
   }
 
@@ -62,25 +63,18 @@ const App = () => {
     setUser(null)
   }
 
-  const handleSubmit = event => {
-    event.preventDefault()
-
-    const newBlog = {
-      title,
-      author,
-      url
-    }
-
+  const create = ( newBlog ) => {
+    
     blogService.create(newBlog)
     .then(returnedBlog => {
       setBlogs([...blogs, returnedBlog])
+      
       setNotification(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
+      
       setTimeout(() => {
         setNotification(null)
       }, 5000)
-      setTitle('')
-      setAuthor('')
-      setUrl('')
+
     })
   }
 
@@ -98,16 +92,12 @@ const App = () => {
           />) :
           (<Blogs
             blogs={ blogs }
+            setBlogs={ setBlogs }
             username={ user.username }
             handleLogOut={ handleLogOut }
-            title={ title }
-            setTitle={ setTitle }
-            author={ author }
-            setAuthor={ setAuthor }
-            url={ url }
-            setUrl={ setUrl }
-            handleSubmit={ handleSubmit }
+            create={ create }
             notification={ notification }
+            setNotification={ setNotification }
           />) 
       }
     </div>

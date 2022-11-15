@@ -1,8 +1,9 @@
 import React from 'react'
 import Blog from './Blog'
 import Create from './Create'
+import Togglable from './Togglable'
 
-function Blogs({ blogs, username, handleLogOut, title, setTitle, author, setAuthor, url, setUrl, handleSubmit, notification }) {
+function Blogs({ blogs, setBlogs, username, handleLogOut, create, notification, setNotification }) {
   return (
     <>
         <h1>blogs</h1>
@@ -20,19 +21,22 @@ function Blogs({ blogs, username, handleLogOut, title, setTitle, author, setAuth
           <button onClick={handleLogOut}>log out</button>
         </p>
 
-        <Create
-          title={ title }
-          setTitle={ setTitle }
-          author={ author }
-          setAuthor={ setAuthor }
-          url={ url }
-          setUrl={ setUrl }
-          handleSubmit={ handleSubmit }
-        />
+        <Togglable buttonLabel='new blog'>
+          <Create
+            create={ create }
+          />
+        </Togglable>
 
         { 
           Array.from(blogs).map(blog => {
-            return <Blog key={blog.id} blog={blog} />
+            return <Blog 
+                      key={blog.id}
+                      blog={blog} 
+                      blogs={blogs} 
+                      setBlogs={ setBlogs } 
+                      notification={ notification } 
+                      setNotification={ setNotification } 
+                    />
           })
         }
     </>
