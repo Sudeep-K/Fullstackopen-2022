@@ -1,13 +1,32 @@
-import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { toggleImportanceOf } from '../reducers/noteReducer'
 
-function Note({ note, toggleImportance }) {
-  const label = note.important ? 'make not important' : 'make important' 
-  return (
-    <div className='note-div'>
-      <li className='note'>{note.content}</li>
-      <button onClick = {() => toggleImportance(note.id)}>{label}</button>
-    </div>
+const Note = ({ note, handleClick }) => {
+  return(
+    <li onClick={handleClick}>
+      {note.content} 
+      <strong> {note.important ? 'important' : ''}</strong>
+    </li>
   )
 }
 
-export default Note
+const Notes = () => {
+  const dispatch = useDispatch()
+  const notes = useSelector(state => state)
+
+  return(
+    <ul>
+      {notes.map(note =>
+        <Note
+          key={note.id}
+          note={note}
+          handleClick={() => 
+            dispatch(toggleImportanceOf(note.id))
+          }
+        />
+      )}
+    </ul>
+  )
+}
+
+export default Notes
