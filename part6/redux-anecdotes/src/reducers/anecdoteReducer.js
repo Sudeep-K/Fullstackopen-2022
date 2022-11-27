@@ -1,3 +1,5 @@
+import { createSlice } from "@reduxjs/toolkit"
+
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -9,24 +11,6 @@ const anecdotesAtStart = [
 
 export const getId = () => (100000 * Math.random()).toFixed(0)
 
-export const anecdoteToAdd = (content) => {
-  return {
-    type: 'NEW_ANECDOTE',
-    data: {
-      content,
-      id: getId,
-      votes: 0
-    }
-  }
-}
-
-export const vote = (id) => {
-  return {
-    type: 'VOTE',
-    id
-  }
-}
-
 const asObject = (anecdote) => {
   return {
     content: anecdote,
@@ -37,21 +21,26 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
-const reducer = (state = initialState, action) => {
-  switch(action.type) {
-    case('VOTE'): {
-      const anecdoteToChange = state.find(a => a.id === action.id)
+const anecdoteSlice = createSlice({
+  name: 'anecdotes',
+  initialState,
+  reducers: {
+    vote(state, action) {
+      const anecdoteToChange = state.find(a => a.id === action.payload)
       const changedAnecdote = { ...anecdoteToChange, votes: anecdoteToChange.votes + 1 }
-      const unsortedAnecdote = state.map(a => a.id !== action.id ? a : changedAnecdote)
-      state = unsortedAnecdote.sort((a1, a2) => (a1.votes < a2.votes) ? 1 : (a1.votes > a2.votes) ? -1 : 0)
-      return state
+      const unsortedAnecdote = state.map(a => a.id !== action.payload ? a : changedAnecdote)
+      return unsortedAnecdote.sort((a1, a2) => (a1.votes < a2.votes) ? 1 : (a1.votes > a2.votes) ? -1 : 0)
+    },
+    anecdoteToAdd(state, action) {
+      const newAnecdote = {
+        content: action.payload,
+        id: getId(),
+        votes: 0
+      }
+      return [ ...state, newAnecdote ]
     }
-    case('NEW_ANECDOTE'): {
-      return [ ...state, action.data ]
-    }
-    default:
-      return state
   }
-}
+})
 
-export default reducer
+export const { vote, anecdoteToAdd } = anecdoteSlice.actions
+export default anecdoteSlice.reducer
