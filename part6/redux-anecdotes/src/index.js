@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import { configureStore } from '@reduxjs/toolkit'
 import { Provider } from 'react-redux'
 import App from './App'
-import { vote, anecdoteToAdd } from './reducers/anecdoteReducer'
+import { vote, anecdoteToAdd, setAnecdote, appendAnecdote } from './reducers/anecdoteReducer'
 import anecdoteReducer from './reducers/anecdoteReducer'
 import notificationReducer from './reducers/notificationReducer'
 import { notificationChange, hideNotification } from './reducers/notificationReducer'
@@ -15,7 +15,9 @@ const store = configureStore({
     vote,
     anecdoteToAdd,
     notificationChange,
-    hideNotification
+    hideNotification,
+    setAnecdote,
+    appendAnecdote
   }
 })
 
