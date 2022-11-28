@@ -4,17 +4,16 @@ import App from './reduxApp';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
 
-import noteReducer from './reducers/noteReducer';
+import noteReducer, { setNotes } from './reducers/noteReducer';
 import filterReducer from './reducers/filterReducer';
 
 const store = configureStore({
   reducer:{
     notes: noteReducer,
-    filter: filterReducer
+    filter: filterReducer,
+    setNotes
   }
 })
-
-console.log(store.getState());
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
