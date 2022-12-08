@@ -1,7 +1,10 @@
 import React from 'react'
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { createBlog } from '../reducers/blogs'
 
-function Create({ create }) {
+const Create = () => {
+    const dispatch = useDispatch()
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [url, setUrl] = useState('')
@@ -9,11 +12,12 @@ function Create({ create }) {
     const handleSubmit = (event) => {
         event.preventDefault()
 
-        create({
+        dispatch( createBlog({
             title,
             author,
-            url
-        })
+            url,
+            likes: 0
+        }) )
 
         setTitle('')
         setAuthor('')

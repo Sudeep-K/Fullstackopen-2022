@@ -1,17 +1,29 @@
 import React from 'react'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
-const Login = ({ notification, username, password, setUsername, setPassword, handleLogin }) => {
+import { userLogin } from '../reducers/user'
+
+const Login = () => {
+  const dispatch = useDispatch()
+
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
+  const handleLogin = (e) => {
+    e.preventDefault()
+    const user = {
+      username,
+      password
+    }
+    dispatch( userLogin(user) )
+    setUsername('')
+    setPassword('')
+  }
+
   return (
     <>
         <h1>Login to application</h1>
-
-        {
-          notification === null ?
-          true : 
-          (
-            <div className='notification'> { notification } </div>
-          )
-        }
 
         <form onSubmit={ handleLogin }>
             <div>
