@@ -1,0 +1,15 @@
+{
+  "name": "phonebook-backend",
+  "version": "1.0.0",
+  "description": "backend for phonebook-application using graphql",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Sudeep-K",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "^4.2.2",
+    "uuid": "^9.0.0"
+  }
+}
