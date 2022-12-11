@@ -47,6 +47,72 @@ blogRouter.post('/', async (req, res, next) => {
     }
 })
 
+blogRouter.post('/:id', async (req, res, next) => {
+    const body = req.body
+
+    try {
+        const decodedToken = jwt.verify(req.token, process.env.SECRET)
+
+        if (!decodedToken.id) {
+            return res.status(401).json({
+                error: 'token missing or invalid'
+            })
+        }
+
+        const user = await User.findById(decodedToken.id)
+        const blog = await Blog.findById(req.params.id)
+
+        const updatedBlog = {
+            title: body.title,
+            author: body.author,
+            url: body.url,
+            likes: body.likes,
+            user: user._id
+        }
+
+        if (true) {
+            const response = await Blog.findByIdAndUpdate(req.params.id, updatedBlog, {new: true})
+            res.status(204).json(response)
+        } else {
+            res.status(401).json({
+                error: 'token missing or invalid'
+            })
+        }
+    } catch(exception) {
+        next(exception)
+    }
+})
+
+blogRouter.post('/:id/comment', async (req, res, next) => {
+    const body = req.body
+
+    try {
+        const decodedToken = jwt.verify(req.token, process.env.SECRET)
+
+        if (!decodedToken.id) {
+            return res.status(401).json({
+                error: 'token missing or invalid'
+            })
+        }
+
+        const blog = await Blog.findById(req.params.id)
+
+        const commentedBlog = {
+            title: blog.title,
+            author: blog.author,
+            url: blog.url,
+            likes: blog.likes,
+            user: blog.user._id,
+            comments: [ ...blog.comments, body.comment ]
+        }
+
+        const response = await Blog.findByIdAndUpdate(req.params.id, commentedBlog, {new: true})
+        res.status(204).json(response)
+    } catch(exception) {
+        next(exception)
+    }
+})
+
 blogRouter.delete('/:id', async (req, res, next) => {
     try {
         const decodedToken = jwt.verify(req.token, process.env.SECRET)
