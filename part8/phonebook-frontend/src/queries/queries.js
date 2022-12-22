@@ -25,15 +25,23 @@ export const ALL_PERSONS = gql`
 `
 
 export const CREATE_PERSON = gql`
-mutation Mutation($name: String!, $street: String!, $city: String!, $phone: String) {
-    addPerson(name: $name, street: $street, city: $city, phone: $phone) {
-    name
-    phone
-    id
-    address {
-        city
-        street
+  mutation Mutation($name: String!, $street: String!, $city: String!, $phone: String) {
+      addPerson(name: $name, street: $street, city: $city, phone: $phone) {
+      name
+      phone
+      id
+      address {
+          city
+          street
+      }
+      }
+  }
+`
+
+export const LOGIN = gql`
+  mutation login($username: String!, $password: String!) {
+    login(username: $username, password: $password)  {
+      value
     }
-    }
-}
+  }
 `

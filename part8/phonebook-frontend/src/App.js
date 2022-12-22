@@ -1,13 +1,18 @@
-import { gql, useQuery } from '@apollo/client'
+import { gql, useApolloClient, useQuery } from '@apollo/client'
+import { useState } from 'react'
+
+import LoginForm from './components/LoginForm'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import { ALL_PERSONS } from './queries/queries'
-import { useState } from 'react'
 
 
 const App = () => {
+  const [ token, setToken ] = useState(null)
   const [ errorMessage, setErrorMessage ] = useState(null)
 
+  const client = useApolloClient()
+  
   const result = useQuery(ALL_PERSONS, {
     pollInterval: 2000
   })
@@ -19,8 +24,10 @@ const App = () => {
     }, 2000);
   }
 
-  if (result.loading) {
-    return(<div>loading...</div>)
+  const logout = () => {
+    setToken(null)
+    localStorage.clear()
+    client.resetStore()
   }
 
   const Notify = ({errorMessage}) => {
@@ -34,9 +41,27 @@ const App = () => {
     )
   }
 
+  if (!token) {
+    return (
+      <div>
+        <Notify errorMessage={ errorMessage } />
+        <h2>Login</h2>
+        <LoginForm
+          setToken={ setToken }
+          setError={ notify }
+        />
+      </div>
+    )
+  }
+
+  if (result.loading) {
+    return(<div>loading...</div>)
+  }
+
   return (
     <div>
       <Notify errorMessage={ errorMessage } />
+      <button onClick={ logout }>logout</button>
       <Persons persons={result.data.allPersons} />
       <PersonForm />
     </div>
